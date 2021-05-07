@@ -14,8 +14,7 @@ public class Starter {
                 methods.add(m);
             }
         }
-        methods.sort(Comparator.comparingInt((Method i) -> i.getAnnotation(Test.class).priority())
-                .reversed());
+        methods.sort(Comparator.comparingInt((Method i) -> i.getAnnotation(Test.class).priority()).reversed());
 
         for(Method m : clasmeth){
             if(m.isAnnotationPresent(BeforeSuite.class)){
@@ -34,14 +33,19 @@ public class Starter {
                 methods.add(m);
             }
         }
-
-        for(Method m: clasmeth){
-            try{
-                m.invoke(null);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
+        try {
+            Object c = s.newInstance();
+            for(Method m: methods){
+                try{
+                    m.invoke(c);
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
+
     }
 
 }
